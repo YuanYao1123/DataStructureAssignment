@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -89,27 +90,12 @@ public class BinarySearchTree<E extends Comparable<E>> implements Container<E> {
         preOrder(node.right);
     }
 
-    public void preOrderNR(){
-
-        if(root == null)
-            return;
-
-        Stack<Node> stack = new Stack<>();
-        stack.push(root);
-        while(!stack.isEmpty()){
-            Node cur = stack.pop();
-            System.out.println(cur.e);
-
-            if(cur.right != null)
-                stack.push(cur.right);
-            if(cur.left != null)
-                stack.push(cur.left);
-        }
-    }
 
     @Override
-    public String print(){
-        return toString();
+    public ArrayList<E> print(){
+        ArrayList<E> studentArrayList=new ArrayList<>();
+        inOrderAsList(root,studentArrayList);
+        return studentArrayList;
     }
 
     @Override
@@ -132,6 +118,14 @@ public class BinarySearchTree<E extends Comparable<E>> implements Container<E> {
         inOrder(node.right);
     }
 
+    private void inOrderAsList(Node node,ArrayList<E> studentArrayList){
+        if(node == null)
+            return;
+        inOrderAsList(node.left,studentArrayList);
+        studentArrayList.add(node.e);
+        inOrderAsList(node.right,studentArrayList);
+    }
+
     public void postOrder(){
         postOrder(root);
     }
@@ -146,23 +140,6 @@ public class BinarySearchTree<E extends Comparable<E>> implements Container<E> {
         System.out.print(node.e+"  ");
     }
 
-    public void levelOrder(){
-
-        if(root == null)
-            return;
-
-        Queue<Node> q = new LinkedList<>();
-        q.add(root);
-        while(!q.isEmpty()){
-            Node cur = q.remove();
-            System.out.println(cur.e);
-
-            if(cur.left != null)
-                q.add(cur.left);
-            if(cur.right != null)
-                q.add(cur.right);
-        }
-    }
 
     public E minimum(){
         if(size == 0)
@@ -210,24 +187,6 @@ public class BinarySearchTree<E extends Comparable<E>> implements Container<E> {
         return node;
     }
 
-    public E removeMax(){
-        E ret = maximum();
-        root = removeMax(root);
-        return ret;
-    }
-
-    private Node removeMax(Node node){
-
-        if(node.right == null){
-            Node leftNode = node.left;
-            node.left = null;
-            size --;
-            return leftNode;
-        }
-
-        node.right = removeMax(node.right);
-        return node;
-    }
 
     @Override
     public void removeBy(E e){
@@ -249,14 +208,14 @@ public class BinarySearchTree<E extends Comparable<E>> implements Container<E> {
         }
         else{   // e.compareTo(node.e) == 0
 
-            if(node.left == null){
+            if(node.left == null ){
                 Node rightNode = node.right;
                 node.right = null;
                 size --;
                 return rightNode;
             }
 
-            if(node.right == null){
+            if(node.right == null ){
                 Node leftNode = node.left;
                 node.left = null;
                 size --;
@@ -273,6 +232,9 @@ public class BinarySearchTree<E extends Comparable<E>> implements Container<E> {
             return successor;
         }
     }
+
+
+
 
     @Override
     public String toString(){

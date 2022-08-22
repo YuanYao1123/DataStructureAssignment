@@ -1,25 +1,39 @@
+import java.util.ArrayList;
+
 public interface Container <E>{
 
-
-    int getSize();
-
+    /**
+     * add a student
+     * param: student object
+     * return: whether add succeeded
+     */
     boolean addElement(E e);
 
     /**
-     * delete by studentID
+     * delete by studentName
      * @param e
+     * return the deleted student
      */
-    void removeBy(E e);   //by index
+    void removeBy(E e);   //by student name
 
     /**
-     * delete by studentID
+     * search a student by studentName
      * @param e
-     * @return
+     * return the information of the student
      */
-    E searchBy(E e);      //by index
+    E searchBy(E e);      //by student name
 
-    String print();
+    /**
+     * print all students' info
+     * return a string contained all students' info
+     */
+    ArrayList<E> print();
 
+    /**
+     * sort student by student name
+     */
     void sort();
+
+    int getSize();
 
 }

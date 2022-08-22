@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class MyArrayList<E extends Comparable<E>> implements Container<E> {
 
     private E[] data;
@@ -132,8 +134,12 @@ public class MyArrayList<E extends Comparable<E>> implements Container<E> {
     }
 
     @Override
-    public String print(){
-        return toString();
+    public ArrayList<E> print(){
+        ArrayList<E> studentArrayList=new ArrayList<>();
+        for(int i = 0 ; i < size ; i ++) {
+            studentArrayList.add(data[i]);
+        }
+        return studentArrayList;
     }
 
     @Override

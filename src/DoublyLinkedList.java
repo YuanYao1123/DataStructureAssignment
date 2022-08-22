@@ -1,7 +1,8 @@
+import java.util.ArrayList;
 import java.util.Comparator;
 
 public class DoublyLinkedList<T extends Comparable<T>> implements Container<T> {
-    private static int size;
+    private int size;
     private Node<T> first;
     private Node<T> last;
 
@@ -173,7 +174,7 @@ public class DoublyLinkedList<T extends Comparable<T>> implements Container<T> {
     @Override
     public T searchBy(T t){
         Node<T> node = first;
-        while (node.next!=null){
+        while (node!=null){
             if (t.compareTo(node.data)==0){
                 return node.data;
             }
@@ -209,17 +210,17 @@ public class DoublyLinkedList<T extends Comparable<T>> implements Container<T> {
 
 
     @Override
-    public String print(){
+    public ArrayList<T> print(){
+        ArrayList<T> studentArrayList=new ArrayList<>();
         if (size == 0) {
             System.out.println("null!");
         }
-        StringBuilder sb=new StringBuilder();
         Node<T> node = first;
         while (node != null) {
-            sb.append(node.getData()).append("  ");
+           studentArrayList.add(node.data);
             node = node.next;
         }
-        return sb.toString();
+        return studentArrayList;
     }
 
     /**

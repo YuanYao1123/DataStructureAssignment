@@ -8,66 +8,203 @@ import java.util.Scanner;
 public class Test {
 
     public static void main(String[] args) {
-//        initFile();
+//        initFileDatabase();
+        while (true) {
+            System.out.println("----------Welcome to the student information system---------");
+            System.out.println("Choose the purpose:");
+            System.out.println("1: Use");
+            System.out.println("2: Compare and Test the performance of different implementation");
+            System.out.println("3: Exit");
+            Scanner sc = new Scanner(System.in);
+            int i = sc.nextInt();
+            if (i == 1) {
+                startSys();
+            } else if (i == 2) {
+                compare();
+            } else if (i == 3) {
+                break;
+            }
+        }
+    }
+    public static void startSys() {
+        Container<Student> container = null;
+        // load the data from file
         ArrayList<Student> studentList = loadFileAsList();
-//        System.out.println(studentArrayList.toString());
+        Container<Student> containerArray = new MyArrayList<>();
+        Container<Student> containerLinkedList = new DoublyLinkedList<>();
+        Container<Student> containerBST = new BinarySearchTree<>();
+        add(containerArray, studentList);
+        add(containerLinkedList, studentList);
+        add(containerBST, studentList);
+        //User Interface
+        while (true) {
+            System.out.println("Please select the system you wanna use:");
+            System.out.println("1: System1: Array based system");
+            System.out.println("2: System2: Doubly Linked List based system");
+            System.out.println("3: System3: Binary Search Tree based system");
+            Scanner sc = new Scanner(System.in);
+            int i = sc.nextInt();
+            if (sc.hasNextLine()) {
+                sc.nextLine();
+            }
+            int flag = 1;
+            switch (i) {
+                case 1:
+                    container = containerArray;
+                    break;
+                case 2:
+                    container = containerLinkedList;
+                    break;
+                case 3:
+                    container = containerBST;
+                    break;
+                default:
+                    System.out.println("Please type the number between 1-3");
+                    flag = 0;
+            }
+            while (true) {
+                if (flag == 1) {
+                    System.out.println("please select the function you wanna use!");
+                    System.out.println("1: Add a student");
+                    System.out.println("2: Delete a student by name");
+                    System.out.println("3: Search a student by name");
+                    System.out.println("4: Print all students' information(just show the last 100 data as a demo)");
+                    System.out.println("5: Sort students by student Name");
+                    System.out.println("6: Exit");
+                    int selection = sc.nextInt();
+                    if (selection == 1) {
+                        if (sc.hasNextLine()) {
+                            sc.nextLine();
+                        }
+                        System.out.println("Please input the student information");
+                        System.out.println("Name: ");
+                        String name = sc.nextLine();
+                        System.out.println("Age: ");
+                        int age = sc.nextInt();
+                        if (sc.hasNextLine()) {
+                            sc.nextLine();
+                        }
+                        System.out.println("Major: ");
+                        String major = sc.nextLine();
+                        System.out.println("Country: ");
+                        String country = sc.nextLine();
+                        Student student = new Student(name, age, major, country);
+                        if (container.addElement(student)) {
+                            System.out.println("Adding succeeded!");
+                            container.print();
+                        }
+                    } else if (selection == 2) {
+                        System.out.println("Please input the student name you wanna delete");
+                        System.out.println("Name: ");
+                        if (sc.hasNextLine()) {
+                            sc.nextLine();
+                        }
+                        String name = sc.nextLine();
+                        container.removeBy(new Student(name, 0, null, null));
+                        System.out.println("Deleting succeeded!");
+                        container.print();
+                    } else if (selection == 3) {
+                        System.out.println("Please input the student name you wanna search");
+                        System.out.println("Name: ");
+                        if (sc.hasNextLine()) {
+                            sc.nextLine();
+                        }
+                        String name = sc.nextLine();
+                        Student student = container.searchBy(new Student(name, 0, null, null));
+                        System.out.println(student);
+                    } else if (selection == 4) {
+                        ArrayList<Student> students = container.print();
+                        for (int j = students.size()-99; j <= students.size()-1; j++) {
+                            System.out.println(students.get(j));
+                        }
+                    } else if (selection == 5) {
+                        System.out.println("It's sorting now, please wait a moment.");
+                        container.sort();
+                    } else if (selection == 6) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+
+    public static void compare(){
+        ArrayList<Student> studentList = loadFileAsList();
         Container<Student> containerArray=new MyArrayList<>();
         Container<Student> containerLinkedList=new DoublyLinkedList<>();
         Container<Student> containerBST=new BinarySearchTree<>();
-        System.out.println("----------------Start Test------------------\n");
-        System.out.println("Batch Add:--------------");
-        System.out.print("Array:  ");
-        testAdd(containerArray,studentList);
-        System.out.print("Doubly Linked List: ");
-        testAdd(containerLinkedList,studentList);
-        System.out.print("Binary Search Tree: ");
-        testAdd(containerBST,studentList);
-        System.out.println();
+        while (true) {
+            System.out.println("Welcome to the Compare and Test System");
+            System.out.println("Please select the function you want to compare");
+            System.out.println("1: Batch Add 50000 students information(recommend doing first)");
+            System.out.println("2: Sort students by student Name");
+            System.out.println("3: Delete a student by name");
+            System.out.println("4: Search a student by name");
+            System.out.println("5: Print all students' information");
+            System.out.println("6: Exit");
+            Scanner sc = new Scanner(System.in);
+            int selection = sc.nextInt();
+            if (selection == 1) {
+                System.out.print("Array:  ");
+                testAdd(containerArray, studentList);
+                System.out.print("Doubly Linked List: ");
+                testAdd(containerLinkedList, studentList);
+                System.out.print("Binary Search Tree: ");
+                testAdd(containerBST, studentList);
+                System.out.println();
+            } else if (selection == 2) {
+                System.out.println("Sort:--------------");
+                System.out.print("Array(Quick Sort):  ");
+                testSort(containerArray);
+                System.out.print("Doubly Linked List(Selection Sort):  ");
+                testSort(containerLinkedList);
+                System.out.print("Binary Search Tree: ");
+                testSort(containerBST);
+                System.out.println();
+            } else if (selection == 3) {
+                Student stu = new Student();
+                stu.setStuName("Carmen");
+                System.out.print("Array:  ");
+                testDelete(containerArray, stu);
+                System.out.print("Doubly Linked List: ");
+                testDelete(containerLinkedList, stu);
+                System.out.print("Binary Search Tree: ");
+                testDelete(containerBST, stu);
+                System.out.println();
+            } else if (selection == 4) {
+                Student stu2 = new Student();
+                stu2.setStuName("Samson");
+                System.out.print("Array:  ");
+                testSearch(containerArray, stu2);
+                System.out.print("Doubly Linked List: ");
+                testSearch(containerLinkedList, stu2);
+                System.out.print("Binary Search Tree: ");
+                testSearch(containerBST, stu2);
+                System.out.println();
+            } else if (selection == 5) {
+                System.out.print("Array:  ");
+                testPrint(containerArray);
+                System.out.print("Doubly Linked List: ");
+                testPrint(containerLinkedList);
+                System.out.print("Binary Search Tree: ");
+                testPrint(containerBST);
+                System.out.println();
+            } else if (selection==6) {
+                break;
+            }
+        }
+    }
 
-        System.out.println("Sort:--------------");
-        System.out.print("Array:  ");
-        testSort(containerArray);
-        System.out.print("Doubly Linked List: ");
-        testSort(containerLinkedList);
-        System.out.print("Binary Search Tree: ");
-        testSort(containerBST);
-        System.out.println();
-
-        System.out.println("Delete By a Student Name:--------------");
-        Student stu=new Student();
-        stu.setStuName("Carmen");
-        System.out.print("Array:  ");
-        testDelete(containerArray,stu);
-        System.out.print("Doubly Linked List: ");
-        testDelete(containerLinkedList,stu);
-        System.out.print("Binary Search Tree: ");
-        testDelete(containerBST,stu);
-        System.out.println();
-
-        System.out.println("Search By a Student Name:--------------");
-        Student stu2=new Student();
-        stu2.setStuName("Samson");
-        System.out.print("Array:  ");
-        testSearch(containerArray,stu2);
-        System.out.print("Doubly Linked List: ");
-        testSearch(containerLinkedList,stu2);
-        System.out.print("Binary Search Tree: ");
-        testSearch(containerBST,stu2);
-        System.out.println();
-
-        System.out.println("Print:--------------");
-        System.out.print("Array:  ");
-        testPrint(containerArray);
-        System.out.print("Doubly Linked List: ");
-        testPrint(containerLinkedList);
-        System.out.print("Binary Search Tree: ");
-        testPrint(containerBST);
-        System.out.println();
+    public static void add(Container<Student> container,ArrayList<Student> addedData){
+        for (Student addedDatum : addedData) {
+            container.addElement(addedDatum);
+        }
     }
     public static void testAdd(Container<Student> container,ArrayList<Student> addedData){
         long start = System.currentTimeMillis();
-        for (int i = 0; i < addedData.size(); i++) {
-            container.addElement(addedData.get(i));
+        for (Student addedDatum : addedData) {
+            container.addElement(addedDatum);
         }
         long end = System.currentTimeMillis();
         System.out.println("Time spend:"+(end-start));
@@ -101,6 +238,7 @@ public class Test {
         System.out.println("Time spend:"+(end-start));
     }
 
+
     public static ArrayList<Student> loadFileAsList(){
         File file=new File("student.txt");
         Scanner sc=null;
@@ -122,7 +260,9 @@ public class Test {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }finally {
-            sc.close();
+            if (sc != null) {
+                sc.close();
+            }
         }
     }
 
